@@ -6,7 +6,7 @@ new Vue({
       playerHealth: 99,
       monsterHealth: 99,
       gameIsRunning: false,
-      turns:0
+      turns: []
   },
   computed:{
       output: function() {
@@ -21,9 +21,28 @@ new Vue({
         this.monsterHealth = 100;
     },
     attack: function(){
-        this.monsterHealth -= this.calcDamage(3,10);
+        damage = this.calcDamage(3,10);
+        this.monsterHealth -= damage;
+        this.turns.unshift({
+            // isPlayer = true,
+            text: 'Player hits monster for ' + damage
+        });
+
+
         this.checkIfWon();
         this.monsterAttack();
+        
+    },
+    monsterAttack: function(){
+        damage = this.calcDamage(4,12);
+        this.playerHealth -= damage;
+
+        this.turns.unshift({
+            // isPlayer = false,
+            text: 'Monster hits player for ' + damage
+        });
+
+        this.checkIfWon();
     },
 
     calcDamage : function(min, max){
@@ -47,22 +66,43 @@ new Vue({
     },
 
     specialAttack: function(){
-        this.monsterHealth -= this.calcDamage(10,20);
+        damage = this.calcDamage(10,20);
+        this.monsterHealth -= damage;
+        this.turns.unshift({
+            // isPlayer = true,
+            text: 'Player hits monster for ' + damage
+        });
+
         this.checkIfWon();
         this.monsterAttack();
         
     },
-    monsterAttack: function(){
-        this.playerHealth -= this.calcDamage(4,12);
-        this.checkIfWon();
-    },
+
     heal: function(){
-        this.playerHealth += this.calcDamage(3,10);
+        heal;
+        console.log(typeof this.playerHelth);
+        console.log(this.playerHelth < 50);
+        console.log(this.playerHelth > 50);
+        console.log(this.playerHelth = 50);
+        if(this.playerHelth<=93){
+            heal = this.calcDamage(7,10);
+            this.playerHealth += heal;
+        }
+        else{
+            heal = "full health" 
+            this.playerHealth = 100;
+        }
+
+        this.turns.unshift({
+            // isPlayer = true,
+            text: 'Player heals for ' + heal
+        });
+
         this.checkIfWon();
         this.monsterAttack();
     },
     giveUp: function(){
-        
+        this.gameIsRunning = false;
     }
   }
 })
